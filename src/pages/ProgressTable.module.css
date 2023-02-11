@@ -1,0 +1,16 @@
+.modalTitle {
+    margin: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.modalButtonContainer {
+    display: flex;
+    gap: 30px;
+    font-size: 24px;
+    justify-content: center;
+}
+
+.modalButtonContainer > button{
+    padding: 15px 20px
+}
