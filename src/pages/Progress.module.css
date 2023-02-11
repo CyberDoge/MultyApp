@@ -1,0 +1,39 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 50%;
+    gap: 16px;
+    text-align: left;
+}
+@media only screen and (min-width: 600px) {
+    .form {
+        width: 100%;
+    }
+}
+.labelSubtext {
+    display: inline-block;
+    text-align: right;
+    width: 200px;
+}
+
+.submit {
+    margin-top: 40px;
+}
+label {
+    width: 100%;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    text-align: left;
+    padding: 10px;
+}
+
+.count {
+    min-width: 100%;
+    display: flex;
+}
+.count > button {
+    width: 50%;
+}
