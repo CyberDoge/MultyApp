@@ -35,12 +35,10 @@ export function save(item) {
   let query = store.put(item, getKey(item));
   return new Promise((resolve, reject) => {
     query.onsuccess = function (event) {
-      console.log(event);
       resolve(event);
     };
 
     query.onerror = function (event) {
-      console.log(event.target.errorCode);
       reject(event);
     };
   });
@@ -84,7 +82,6 @@ export async function sync() {
   const parsedContent = decodeURIComponent(
     escape(window.atob(json.result.content[0]))
   );
-  debugger;
   const data = JSON.parse(parsedContent, (key, value) =>
     key === "date" ? new Date(value) : value
   );
