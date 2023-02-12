@@ -13,7 +13,7 @@ const Progress = () => {
 
   const submit = async (e) => {
     e.preventDefault();
-    console.log(exec, mass, count, repeats);
+
     if (!(exec && mass && count && repeats)) {
       return setMessage("не все заполенено");
     }
@@ -46,7 +46,6 @@ const Progress = () => {
     return 2;
   }
 
-  console.log(allExercises.find((a) => a.value === exec));
   const restExercises = exercises.slice();
   restExercises.splice(getDay(), 1);
   return (
@@ -56,6 +55,7 @@ const Progress = () => {
         <a
           target="_blank"
           href={allExercises.find((a) => a.value === exec)?.link}
+          rel="noreferrer"
         >
           {" "}
           {exec}

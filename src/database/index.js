@@ -1,5 +1,9 @@
-import {getAll, getById, save, update} from "./exercisesDb";
+import { getAll, getById, save, push, sync } from "./exercisesDb";
 
 export const exercisesDb = {
-    save, getById, getAll, update
-}
+  save,
+  getById,
+  getAll,
+  push,
+  sync,
+};

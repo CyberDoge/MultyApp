@@ -1,4 +1,5 @@
 import { getKey } from "../models/exercises";
+import { fetchRemote, pushRemote } from "./remoteStorage";
 
 const NAME = "exercisesDb";
 const STORE_NAME = "exercisesStore";
@@ -77,22 +78,24 @@ export async function getAll() {
   });
 }
 
-export async function update(model) {
-  const store = db.transaction(STORE_NAME).objectStore(STORE_NAME);
+export async function sync() {
+  const resp = await fetchRemote();
+  const json = await resp.json();
+  const parsedContent = decodeURIComponent(
+    escape(window.atob(json.result.content[0]))
+  );
+  debugger;
+  const data = JSON.parse(parsedContent, (key, value) =>
+    key === "date" ? new Date(value) : value
+  );
+  data.forEach((m) => save(m));
+}
 
-  const request = store.get(getKey(model));
-  return new Promise((resolve, reject) => {
-    request.onsuccess = () => {
-      const { result } = request;
-
-      const query = store.update({ ...result, ...model });
-      query.onsuccess = function (event) {
-        resolve(event);
-      };
-
-      query.onerror = function (event) {
-        reject(event);
-      };
-    };
-  });
+export async function push() {
+  const data = await getAll();
+  await pushRemote(
+    btoa(unescape(encodeURIComponent(JSON.stringify(data.target.result))))
+  )
+    .then(() => alert("success push"))
+    .catch((e) => alert("error push " + e.getMessage()));
 }
