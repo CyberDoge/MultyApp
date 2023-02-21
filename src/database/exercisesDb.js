@@ -32,7 +32,22 @@ const dbPromise = new Promise((resolve, reject) => {
 export function save(item) {
   const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
-  let query = store.put(item, getKey(item));
+  let query = store.put(item, item.id);
+  return new Promise((resolve, reject) => {
+    query.onsuccess = function (event) {
+      resolve(event);
+    };
+
+    query.onerror = function (event) {
+      reject(event);
+    };
+  });
+}
+
+export function remove(item) {
+  const tx = db.transaction(STORE_NAME, "readwrite");
+  const store = tx.objectStore(STORE_NAME);
+  let query = store.delete(getKey(item));
   return new Promise((resolve, reject) => {
     query.onsuccess = function (event) {
       resolve(event);

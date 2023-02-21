@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
   font-size: 24px;
   margin: 0;
@@ -11,4 +15,33 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+#root {
+  padding: 12px;
+}
+@layer components {
+  .button {
+    @apply bg-gray-100;
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.6');
+    border: 1px solid;
+  }
+  .input {
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.lg');
+    padding: theme('spacing.6');
+    border: 1px solid;
+  }
+}
+button {
+  @apply button;
+}
+
+input, select {
+@apply input;
+  width: 100%;
+}
+
+option {
+  overflow: hidden; 
 }

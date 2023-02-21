@@ -3,6 +3,7 @@ import classes from "./Progress.module.css";
 import { exercisesDb } from "../database";
 import { allExercises, exercises, muscles } from "./consts";
 import { getISODay, startOfDay } from "date-fns";
+import { generateUUID } from "../utils/uuid";
 
 const Progress = () => {
   const [exec, setExec] = useState(null);
@@ -23,6 +24,7 @@ const Progress = () => {
       count,
       repeats,
       date: startOfDay(new Date()),
+      id: generateUUID(),
     });
     setMessage(res.type || "ошибка");
     setTimeout(() => {
@@ -113,11 +115,11 @@ const Progress = () => {
         <div className={classes.count}>
           <button
             onClick={(e) => {
-              setCount((c) => 2 + c);
+              setCount((c) => 1 + c);
               e.preventDefault();
             }}
           >
-            Увеличить кол-во на 2
+            Увеличить кол-во на 1
           </button>
           <button
             onClick={(e) => {

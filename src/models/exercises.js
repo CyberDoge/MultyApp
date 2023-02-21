@@ -1,19 +1,19 @@
-import { save } from "../database/exercisesDb";
+import { exercisesDb } from "../database";
 
 export function useUpdateExercise() {
   return (exercise) => {
-    const { result } = save(exercise);
+    const { result } = exercisesDb.save(exercise);
     return result;
   };
 }
 
 export function useSaveExercise() {
   return (exercise) => {
-    const { result } = save(exercise);
+    const { result } = exercisesDb.save(exercise);
     return result;
   };
 }
 
 export function getKey(exec) {
-  return exec.exec + " " + exec.date.getTime();
+  return exec.id;
 }

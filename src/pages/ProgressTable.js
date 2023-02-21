@@ -1,16 +1,15 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { exercisesDb } from "../database";
 import { allExercises } from "./consts";
 import { startOfDay } from "date-fns";
-import { useUpdateExercise } from "../models/exercises";
-import Modal from "react-modal";
+import { getKey, useUpdateExercise } from "../models/exercises";
 import useLongPress from "../hooks/longClick";
-import classes from "./ProgressTable.module.css";
+import EditModal from "./EditModal";
 
 const ProgressTable = () => {
   const [all, setAll] = useState([]);
-  const [modal, setModal] = useState(false);
-  useEffect(() => {
+  const [selectedExec, setSelectedExec] = useState();
+  const fillAll = useCallback(() => {
     exercisesDb.getAll().then((e) => {
       setAll(
         e?.target.result.sort((f, s) => f.date.getTime() - s.date.getTime()) ||
@@ -18,6 +17,13 @@ const ProgressTable = () => {
       );
     });
   }, []);
+
+  useEffect(() => {
+    fillAll();
+    window.addEventListener("dbChange", fillAll);
+
+    return fillAll;
+  }, [fillAll]);
   const allExercisesFiltered = useMemo(
     () => allExercises.filter((exec) => all.find((i) => i.exec === exec.value)),
     [all]
@@ -27,27 +33,24 @@ const ProgressTable = () => {
   );
   const updateExercise = useUpdateExercise();
 
-  const longPressEvent = useLongPress(() => setModal(true), null, {
-    shouldPreventDefault: true,
-    delay: 500,
-  });
+  const longPressEvent = useLongPress(
+    ({ id }) => {
+      setSelectedExec(id);
+    },
+    null,
+    {
+      shouldPreventDefault: true,
+      delay: 500,
+    }
+  );
 
   return (
     <table>
-      <Modal
-        isOpen={modal}
-        onRequestClose={() => setModal(false)}
-        contentLabel="Удалить"
-      >
-        <h3 className={classes.modalTitle}>Удалить</h3>
-        <div
-          className={classes.modalButtonContainer}
-          style={{ display: "flex", gap: 30 }}
-        >
-          <button>Да</button>
-          <button>Нет</button>
-        </div>
-      </Modal>
+      <EditModal
+        id={selectedExec}
+        isOpen={selectedExec}
+        close={() => setSelectedExec(null)}
+      />
       <thead>
         <tr>
           <th colSpan={100}>Таблица с результатами</th>
@@ -70,14 +73,20 @@ const ProgressTable = () => {
                 .map((i, index) => (
                   <td
                     {...longPressEvent}
-                    onBlur={(event) =>
+                    contentEditable
+                    onMouseDown={(e) =>
+                      longPressEvent.onMouseDown({ ...e, id: getKey(i) })
+                    }
+                    onTouchStart={(e) =>
+                      longPressEvent.onTouchStart({ ...e, id: getKey(i) })
+                    }
+                    onBlur={(event) => {
                       updateExercise({
                         ...i,
                         mass: +event.target.innerHTML,
-                      })
-                    }
+                      });
+                    }}
                     key={index + "mass" + exec.value}
-                    contentEditable
                   >
                     {i.mass}
                   </td>
@@ -90,14 +99,20 @@ const ProgressTable = () => {
                 .map((i, index) => (
                   <td
                     {...longPressEvent}
-                    key={index + "count" + exec.value}
                     contentEditable
-                    onBlur={(event) =>
+                    onMouseDown={(e) =>
+                      longPressEvent.onMouseDown({ ...e, id: getKey(i) })
+                    }
+                    onTouchStart={(e) =>
+                      longPressEvent.onTouchStart({ ...e, id: getKey(i) })
+                    }
+                    key={index + "count" + exec.value}
+                    onBlur={(event) => {
                       updateExercise({
                         ...i,
-                        count: +event.target.value,
-                      })
-                    }
+                        count: +event.target.innerHTML,
+                      });
+                    }}
                   >
                     {i.count}
                   </td>
