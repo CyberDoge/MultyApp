@@ -1,3 +1,4 @@
+import React from "react";
 import Progress from "./pages/Progress";
 import ProgressTable from "./pages/ProgressTable";
 import Header from "./pages/Header";

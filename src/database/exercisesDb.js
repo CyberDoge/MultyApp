@@ -22,7 +22,7 @@ const dbPromise = new Promise((resolve, reject) => {
   openRequest.onupgradeneeded = function (e) {
     db = e.target.result;
     console.log("running onupgradeneeded");
-    let store = db.createObjectStore(STORE_NAME, {
+    db.createObjectStore(STORE_NAME, {
       autoIncrement: true,
     });
     resolve(e);
