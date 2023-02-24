@@ -1,14 +1,26 @@
 import { getKey } from "../models/exercises";
 import { fetchRemote, pushRemote } from "./remoteStorage";
-
+import { Base91 } from "base-ex";
 const NAME = "exercisesDb";
 const STORE_NAME = "exercisesStore";
 let db;
 
 const openRequest = indexedDB.open(NAME, 1);
+
+function promisingDbResult(query) {
+  return new Promise((resolve, reject) => {
+    query.onsuccess = function (event) {
+      resolve(event);
+    };
+
+    query.onerror = function (event) {
+      reject(event);
+    };
+  });
+}
+
 const dbPromise = new Promise((resolve, reject) => {
   openRequest.onsuccess = function (e) {
-    console.log("running onsuccess");
     db = e.target.result;
     resolve(e);
   };
@@ -33,45 +45,21 @@ export function save(item) {
   const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
   let query = store.put(item, item.id);
-  return new Promise((resolve, reject) => {
-    query.onsuccess = function (event) {
-      resolve(event);
-    };
-
-    query.onerror = function (event) {
-      reject(event);
-    };
-  });
+  return promisingDbResult(query);
 }
 
 export function remove(item) {
   const tx = db.transaction(STORE_NAME, "readwrite");
   const store = tx.objectStore(STORE_NAME);
   let query = store.delete(getKey(item));
-  return new Promise((resolve, reject) => {
-    query.onsuccess = function (event) {
-      resolve(event);
-    };
-
-    query.onerror = function (event) {
-      reject(event);
-    };
-  });
+  return promisingDbResult(query);
 }
 
 export async function getById(id) {
   const tx = db.transaction(STORE_NAME, "readonly");
   const store = tx.objectStore(STORE_NAME);
   const query = store.get(id);
-  return new Promise((resolve, reject) => {
-    query.onsuccess = function (event) {
-      resolve(event);
-    };
-
-    query.onerror = function (event) {
-      reject(event);
-    };
-  });
+  return promisingDbResult(query);
 }
 
 export async function getAll() {
@@ -79,24 +67,15 @@ export async function getAll() {
     const tx = db.transaction(STORE_NAME, "readonly");
     const store = tx.objectStore(STORE_NAME);
     const query = store.getAll();
-    return new Promise((resolve, reject) => {
-      query.onsuccess = function (event) {
-        resolve(event);
-      };
-
-      query.onerror = function (event) {
-        reject(event);
-      };
-    });
+    return promisingDbResult(query);
   });
 }
 
 export async function sync() {
   const resp = await fetchRemote();
   const json = await resp.json();
-  const parsedContent = decodeURIComponent(
-    escape(window.atob(json.result.content[0]))
-  );
+  const decoder = new Base91();
+  const parsedContent = decoder.decode(json.result.content[0], "str");
   const data = JSON.parse(parsedContent, (key, value) =>
     key === "date" ? new Date(value) : value
   );
@@ -105,9 +84,8 @@ export async function sync() {
 
 export async function push() {
   const data = await getAll();
-  await pushRemote(
-    btoa(unescape(encodeURIComponent(JSON.stringify(data.target.result))))
-  )
-    .then(() => alert("success push"))
-    .catch((e) => alert("error push " + e.getMessage()));
+  const encoder = new Base91();
+
+  const result = encoder.encode(JSON.stringify(data.target.result));
+  await pushRemote(result);
 }

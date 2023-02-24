@@ -1,3 +1,7 @@
+.message {
+    color: #045793;
+    font-weight: bold;
+}
 .form {
     display: flex;
     flex-direction: column;
@@ -37,6 +41,7 @@ table, th, td {
 .count {
     min-width: 100%;
     display: flex;
+    gap: 32px;
 }
 .count > button {
     width: 50%;

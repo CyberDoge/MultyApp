@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { exercisesDb } from "../database";
 import { allExercises } from "./consts";
 import { startOfDay } from "date-fns";
-import { getKey, useUpdateExercise } from "../models/exercises";
-import useLongPress from "../hooks/longClick";
+import { useUpdateExercise } from "../models/exercises";
 import EditModal from "./EditModal";
+import EditableNumberTd from "./EditableNumberTd";
 
 const ProgressTable = () => {
   const [all, setAll] = useState([]);
   const [selectedExec, setSelectedExec] = useState();
+  console.log(selectedExec);
   const fillAll = useCallback(() => {
     exercisesDb.getAll().then((e) => {
       setAll(
@@ -32,17 +33,6 @@ const ProgressTable = () => {
     (d) => new Date(d)
   );
   const updateExercise = useUpdateExercise();
-
-  const longPressEvent = useLongPress(
-    ({ id }) => {
-      setSelectedExec(id);
-    },
-    null,
-    {
-      shouldPreventDefault: true,
-      delay: 500,
-    }
-  );
 
   return (
     <table>
@@ -71,25 +61,17 @@ const ProgressTable = () => {
               {all
                 .filter((i) => i.exec === exec.value)
                 .map((i, index) => (
-                  <td
-                    {...longPressEvent}
-                    contentEditable
-                    onMouseDown={(e) =>
-                      longPressEvent.onMouseDown({ ...e, id: getKey(i) })
-                    }
-                    onTouchStart={(e) =>
-                      longPressEvent.onTouchStart({ ...e, id: getKey(i) })
-                    }
-                    onBlur={(event) => {
+                  <EditableNumberTd
+                    i={i}
+                    key={index + "mass" + exec.value}
+                    setSelectedExec={setSelectedExec}
+                    updateExercise={(v) => {
                       updateExercise({
                         ...i,
-                        mass: +event.target.innerHTML,
+                        mass: v,
                       });
                     }}
-                    key={index + "mass" + exec.value}
-                  >
-                    {i.mass}
-                  </td>
+                  />
                 ))}
             </tr>
             <tr>
@@ -97,25 +79,17 @@ const ProgressTable = () => {
               {all
                 .filter((i) => i.exec === exec.value)
                 .map((i, index) => (
-                  <td
-                    {...longPressEvent}
-                    contentEditable
-                    onMouseDown={(e) =>
-                      longPressEvent.onMouseDown({ ...e, id: getKey(i) })
-                    }
-                    onTouchStart={(e) =>
-                      longPressEvent.onTouchStart({ ...e, id: getKey(i) })
-                    }
+                  <EditableNumberTd
+                    i={i}
                     key={index + "count" + exec.value}
-                    onBlur={(event) => {
+                    setSelectedExec={setSelectedExec}
+                    updateExercise={(v) => {
                       updateExercise({
                         ...i,
-                        count: +event.target.innerHTML,
+                        count: v,
                       });
                     }}
-                  >
-                    {i.count}
-                  </td>
+                  />
                 ))}
             </tr>
           </React.Fragment>

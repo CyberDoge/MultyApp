@@ -19,6 +19,15 @@ code {
 #root {
   padding: 12px;
 }
+a {
+  color: #2a2aff;
+}
+@media screen and (min-width: 1024px){
+ #root {
+   margin: auto;
+   width: 40%;
+ }
+}
 @layer components {
   .button {
     @apply bg-gray-100;
@@ -43,5 +52,5 @@ input, select {
 }
 
 option {
-  overflow: hidden; 
+  overflow: hidden;
 }

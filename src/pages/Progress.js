@@ -9,21 +9,20 @@ const Progress = () => {
   const [exec, setExec] = useState(null);
   const [mass, setMass] = useState(0);
   const [count, setCount] = useState(0);
-  const [repeats, setRepeats] = useState(0);
+  const [date, setDate] = useState(new Date());
   const [message, setMessage] = useState(undefined);
 
   const submit = async (e) => {
     e.preventDefault();
 
-    if (!(exec && mass && count && repeats)) {
-      return setMessage("не все заполенено");
+    if (!(exec && mass && count)) {
+      return setMessage("не все заполнено");
     }
     const res = await exercisesDb.save({
       exec,
       mass,
       count,
-      repeats,
-      date: startOfDay(new Date()),
+      date: startOfDay(date),
       id: generateUUID(),
     });
     setMessage(res.type || "ошибка");
@@ -31,9 +30,9 @@ const Progress = () => {
       setMessage(undefined);
     }, 5000);
     setExec(undefined);
-    setMass(undefined);
-    setCount(undefined);
-    setRepeats(undefined);
+    setMass(0);
+    setCount(0);
+    setDate(new Date());
   };
 
   function getDay() {
@@ -52,6 +51,7 @@ const Progress = () => {
   restExercises.splice(getDay(), 1);
   return (
     <form className={classes.form} onSubmit={submit}>
+      <h2 className={classes.message}>{message}</h2>
       <p>
         Выбрано:{" "}
         <a
@@ -59,10 +59,10 @@ const Progress = () => {
           href={allExercises.find((a) => a.value === exec)?.link}
           rel="noreferrer"
         >
-          {" "}
+          &nbsp;
           {exec}
-        </a>{" "}
-        --{" "}
+        </a>
+        &nbsp;&mdash;&nbsp;
         {
           muscles.find((value) =>
             allExercises.find((s) => s.value === exec)?.type.includes(value.key)
@@ -96,14 +96,24 @@ const Progress = () => {
           value={mass}
           onChange={(e) => setMass(+e.target.value || undefined)}
         />
-        <button
-          onClick={(e) => {
-            setMass((c) => 5 + c);
-            e.preventDefault();
-          }}
-        >
-          Увеличить вес на 5
-        </button>
+        <div className={classes.count}>
+          <button
+            onClick={(e) => {
+              setMass((c) => 5 + c);
+              e.preventDefault();
+            }}
+          >
+            Увеличить вес на 5
+          </button>
+          <button
+            onClick={(e) => {
+              setMass((c) => c - 1);
+              e.preventDefault();
+            }}
+          >
+            Уменьшить на 1
+          </button>
+        </div>
       </label>
       <label>
         <span className={classes.labelSubtext}>Кол-во:&nbsp;</span>
@@ -129,29 +139,36 @@ const Progress = () => {
           >
             Увеличить кол-во на 2
           </button>
+          <button
+            onClick={(e) => {
+              setCount((c) => c - 1);
+              e.preventDefault();
+            }}
+          >
+            Уменьшить на 1
+          </button>
         </div>
       </label>
       <label>
         <span className={classes.labelSubtext}>Подходы:&nbsp;</span>
         <input
-          type="number"
-          value={repeats}
-          onChange={(e) => setRepeats(+e.target.value || undefined)}
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
         />
         <button
           onClick={(e) => {
-            setRepeats((c) => ++c);
+            setDate(new Date());
             e.preventDefault();
           }}
         >
-          Увеличить подход на 1
+          Сегодня
         </button>
       </label>
 
       <button className={classes.submit} type="submit">
         Сохранить
       </button>
-      <h3>{message}</h3>
     </form>
   );
 };
