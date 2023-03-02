@@ -1,38 +1,66 @@
 import React, { useState } from "react";
 import classes from "./Progress.module.css";
-import { exercisesDb } from "../database";
 import { allExercises, exercises, muscles } from "./consts";
-import { getISODay, startOfDay } from "date-fns";
+import { format, getISODay, startOfDay } from "date-fns";
 import { generateUUID } from "../utils/uuid";
+import { useSaveExercise } from "../models/exercises";
+import ToastMessage from "../components/ToastMessage";
 
 const Progress = () => {
-  const [exec, setExec] = useState(null);
+  const [exec, setExec] = useState(undefined);
   const [mass, setMass] = useState(0);
   const [count, setCount] = useState(0);
+  const [note, setNote] = useState(undefined);
   const [date, setDate] = useState(new Date());
   const [message, setMessage] = useState(undefined);
-
+  const { mutateAsync } = useSaveExercise();
+  console.log(
+    Object.assign(
+      {
+        exec,
+        mass,
+        count,
+        date: startOfDay(date),
+        id: generateUUID(),
+      },
+      note ? { note } : null
+    )
+  );
   const submit = async (e) => {
     e.preventDefault();
 
     if (!(exec && mass && count)) {
-      return setMessage("не все заполнено");
+      return setMessage(
+        "не все заполнено: " +
+          [
+            { k: "exec", v: +exec },
+            { k: "mass", v: +mass },
+            { k: "count", v: +count },
+          ]
+            .filter(({ v, k }) => !v)
+            .map(({ k }) => k)
+            .join(", ")
+      );
     }
-    const res = await exercisesDb.save({
-      exec,
-      mass,
-      count,
-      date: startOfDay(date),
-      id: generateUUID(),
-    });
-    setMessage(res.type || "ошибка");
+    const savedObj = Object.assign(
+      {
+        exec,
+        mass,
+        count,
+        date: startOfDay(date),
+        id: generateUUID(),
+      },
+      note ? { note } : null
+    );
+    const res = await mutateAsync(savedObj);
+    setMessage(res.type + " " + JSON.stringify(savedObj) || "ошибка");
     setTimeout(() => {
       setMessage(undefined);
     }, 5000);
     setExec(undefined);
+    setNote(undefined);
     setMass(0);
     setCount(0);
-    setDate(new Date());
   };
 
   function getDay() {
@@ -51,7 +79,11 @@ const Progress = () => {
   restExercises.splice(getDay(), 1);
   return (
     <form className={classes.form} onSubmit={submit}>
-      <h2 className={classes.message}>{message}</h2>
+      {message && (
+        <ToastMessage close={() => setMessage(undefined)}>
+          {message}
+        </ToastMessage>
+      )}
       <p>
         Выбрано:{" "}
         <a
@@ -75,6 +107,10 @@ const Progress = () => {
           {[{ value: null }, ...exercises[getDay()]].map((e) => (
             <option key={e.value} value={e.value}>
               {e.value}
+              {" - "}
+              {e.type
+                ?.map((t) => muscles.find((s) => s.key === t).value)
+                .join(" ")}
             </option>
           ))}
         </select>
@@ -85,6 +121,10 @@ const Progress = () => {
           {[{ value: null }, ...restExercises.flat()].map((e) => (
             <option key={e.value} value={e.value}>
               {e.value}
+              {" - "}
+              {e.type
+                ?.map((t) => muscles.find((s) => s.key === t).value)
+                .join(" ")}
             </option>
           ))}
         </select>
@@ -94,7 +134,8 @@ const Progress = () => {
         <input
           type="number"
           value={mass}
-          onChange={(e) => setMass(+e.target.value || undefined)}
+          onClick={(e) => e.target.select(0, 100)}
+          onChange={(e) => setMass(e.target.value)}
         />
         <div className={classes.count}>
           <button
@@ -120,7 +161,8 @@ const Progress = () => {
         <input
           type="number"
           value={count}
-          onChange={(e) => setCount(+e.target.value || undefined)}
+          onClick={(e) => e.target.select(0, 100)}
+          onChange={(e) => setCount(e.target.value)}
         />
         <div className={classes.count}>
           <button
@@ -148,13 +190,18 @@ const Progress = () => {
             Уменьшить на 1
           </button>
         </div>
+      </label>{" "}
+      <label>
+        <span className={classes.labelSubtext}>Заметка&nbsp;</span>
+        <input value={note} onChange={(e) => setNote(e.target.value)} />
       </label>
       <label>
-        <span className={classes.labelSubtext}>Подходы:&nbsp;</span>
+        <span className={classes.labelSubtext}>Дата:&nbsp;</span>
         <input
           type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={format(date, "yyyy-MM-dd")}
+          onClick={(e) => e.target.select(0, 100)}
+          onChange={(e) => setDate(new Date(e.target.value))}
         />
         <button
           onClick={(e) => {
@@ -165,7 +212,6 @@ const Progress = () => {
           Сегодня
         </button>
       </label>
-
       <button className={classes.submit} type="submit">
         Сохранить
       </button>

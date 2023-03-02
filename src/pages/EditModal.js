@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from "react";
 import classes from "./ProgressTable.module.css";
 import Modal from "react-modal";
-import { exercisesDb } from "../database";
+import {
+  useExercise,
+  useRemoveExercise,
+  useSaveExercise,
+} from "../models/exercises";
+import { format } from "date-fns";
 
 const EditModal = ({ id, isOpen, close }) => {
   const [exec, setExec] = useState(null);
+  const { data } = useExercise(id);
   useEffect(() => {
-    if (id === null || id === undefined) {
-      return;
+    if (data) {
+      setExec(data);
     }
-    exercisesDb.getById(id).then((event) => {
-      setExec(event.target.result);
-    });
-  }, [id]);
+  }, [data]);
+  const { mutate: save } = useSaveExercise();
+  const { mutate: remove } = useRemoveExercise();
   if (!isOpen) {
     return null;
   }
@@ -20,13 +25,15 @@ const EditModal = ({ id, isOpen, close }) => {
     return <p>загрузка #{id}</p>;
   }
   const submit = () => {
-    // todo подумать над удалением строй записи
-    exercisesDb.save(exec);
+    if (exec) {
+      save(exec);
+    }
     close();
   };
   const deleteExec = () => {
-    // todo подумать над удалением строй записи
-    exercisesDb.remove(exec);
+    if (exec) {
+      remove(exec);
+    }
     close();
   };
 
@@ -53,20 +60,10 @@ const EditModal = ({ id, isOpen, close }) => {
         />
       </label>
       <label>
-        <span>повторений</span>
-        <input
-          type="number"
-          value={exec.repeats}
-          onChange={(event) =>
-            setExec((e) => ({ ...e, repeats: +event.target.value }))
-          }
-        />
-      </label>
-      <label>
         <span>дата</span>
         <input
           type="date"
-          value={exec.date.toISOString().split("T")[0]}
+          value={format(exec.date, "yyyy-MM-dd")}
           onChange={(event) =>
             setExec((e) => ({ ...e, date: new Date(event.target.value) }))
           }

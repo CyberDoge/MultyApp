@@ -4,10 +4,19 @@ import "./index.css";
 import "./firebase";
 import App from "./App";
 import "core-js/full";
+import { QueryClient, QueryClientProvider } from "react-query";
+const queryClient = new QueryClient();
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
   </React.StrictMode>
 );
+document.body.addEventListener("wheel", function () {
+  if (document.activeElement.type === "number") {
+    document.activeElement.blur();
+  }
+});

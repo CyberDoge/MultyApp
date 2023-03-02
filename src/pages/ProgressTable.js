@@ -1,96 +1,115 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { exercisesDb } from "../database";
+import React, { useMemo, useState } from "react";
 import { allExercises } from "./consts";
-import { startOfDay } from "date-fns";
-import { useUpdateExercise } from "../models/exercises";
+import { format, isSameDay, startOfDay } from "date-fns";
+import { useExercises, useUpdateExercise } from "../models/exercises";
 import EditModal from "./EditModal";
 import EditableNumberTd from "./EditableNumberTd";
+import { clsx } from "clsx";
+import classes from "./ProgressTable.module.css";
 
 const ProgressTable = () => {
-  const [all, setAll] = useState([]);
+  const { data: exercises = [] } = useExercises();
   const [selectedExec, setSelectedExec] = useState();
-  console.log(selectedExec);
-  const fillAll = useCallback(() => {
-    exercisesDb.getAll().then((e) => {
-      setAll(
-        e?.target.result.sort((f, s) => f.date.getTime() - s.date.getTime()) ||
-          []
+  const [showTable, setShowTable] = useState(false);
+
+  const constExercises = useMemo(() => {
+    if (exercises) {
+      return allExercises.filter((exec) =>
+        exercises.find((i) => i.exec === exec.value)
       );
-    });
-  }, []);
+    }
+    return [];
+  }, [exercises]);
 
-  useEffect(() => {
-    fillAll();
-    window.addEventListener("dbChange", fillAll);
+  const dates = [
+    ...new Set(exercises.map((i) => startOfDay(i.date).getTime())),
+  ].map((d) => new Date(d));
 
-    return fillAll;
-  }, [fillAll]);
-  const allExercisesFiltered = useMemo(
-    () => allExercises.filter((exec) => all.find((i) => i.exec === exec.value)),
-    [all]
-  );
-  const dates = [...new Set(all.map((i) => startOfDay(i.date).getTime()))].map(
-    (d) => new Date(d)
-  );
-  const updateExercise = useUpdateExercise();
+  const { mutate: updateExercise } = useUpdateExercise();
 
+  const toggleTable = () => {
+    setShowTable((v) => !v);
+  };
   return (
-    <table>
+    <table className={classes.table}>
       <EditModal
         id={selectedExec}
         isOpen={selectedExec}
         close={() => setSelectedExec(null)}
       />
-      <thead>
+      <thead onClick={() => toggleTable()}>
         <tr>
           <th colSpan={100}>Таблица с результатами</th>
         </tr>
-        <tr>
+        <tr className={clsx(!showTable && "hidden")}>
           <td colSpan={2}>дата</td>
           {dates.map((i, index) => (
-            <td key={index + "date"}>{i.getDay()}</td>
+            <td key={index + "date"}>{format(i, "dd.MM")}</td>
           ))}
         </tr>
       </thead>
-      <tbody>
-        {allExercisesFiltered.map((exec) => (
-          <React.Fragment key={exec.value}>
+      <tbody className={clsx(!showTable && "hidden")}>
+        {constExercises.map((constExec) => (
+          <React.Fragment key={constExec.value}>
             <tr>
-              <td rowSpan={2}>{exec.value}</td>
-              <td>вес</td>
-              {all
-                .filter((i) => i.exec === exec.value)
-                .map((i, index) => (
-                  <EditableNumberTd
-                    i={i}
-                    key={index + "mass" + exec.value}
-                    setSelectedExec={setSelectedExec}
-                    updateExercise={(v) => {
-                      updateExercise({
-                        ...i,
-                        mass: v,
-                      });
-                    }}
-                  />
-                ))}
+              <td rowSpan={2}>{constExec.value}</td>
+              <td>В</td>
+              {dates
+                .map((i) => {
+                  return exercises.find((item) => {
+                    return (
+                      item.exec === constExec.value && isSameDay(i, item.date)
+                    );
+                  });
+                })
+                .map((item, index) =>
+                  item ? (
+                    <EditableNumberTd
+                      field={"mass"}
+                      i={item}
+                      key={index + "mass" + constExec.value}
+                      setSelectedExec={setSelectedExec}
+                      updateExercise={(v) => {
+                        updateExercise({
+                          ...item,
+                          mass: v,
+                        });
+                      }}
+                    />
+                  ) : (
+                    <td key={index + "mass" + constExec.value} />
+                  )
+                )}
             </tr>
-            <tr>
-              <td>кол-во</td>
-              {all
-                .filter((i) => i.exec === exec.value)
-                .map((i, index) => (
-                  <EditableNumberTd
-                    i={i}
-                    key={index + "count" + exec.value}
-                    setSelectedExec={setSelectedExec}
-                    updateExercise={(v) => {
-                      updateExercise({
-                        ...i,
-                        count: v,
-                      });
-                    }}
-                  />
-                ))}
+            <tr className="bg-gray-200">
+              <td>К</td>
+              {dates
+                .map((i) => {
+                  return exercises.find((item) => {
+                    return (
+                      item.exec === constExec.value && isSameDay(i, item.date)
+                    );
+                  });
+                })
+                .map((item, index) =>
+                  item ? (
+                    <EditableNumberTd
+                      classNameInput="bg-gray-200"
+                      field={"count"}
+                      i={item}
+                      key={index + "count" + constExec.value}
+                      setSelectedExec={setSelectedExec}
+                      updateExercise={(v) => {
+                        updateExercise({
+                          ...item,
+                          count: v,
+                        });
+                      }}
+                    />
+                  ) : (
+                    <td key={index + "mass" + constExec.value} />
+                  )
+                )}
             </tr>
           </React.Fragment>
         ))}

@@ -1,27 +1,36 @@
 import React from "react";
 import classes from "./Header.module.css";
-import { exercisesDb } from "../database";
+import {
+  useExercises,
+  usePushExercises,
+  useSyncExercises,
+} from "../models/exercises";
 const Header = () => {
+  const { mutateAsync: sync } = useSyncExercises();
+  const { mutateAsync: push } = usePushExercises();
+  const { refetch } = useExercises();
   const confirmPush = () => {
-    if (confirm("Сохранить")) {
-      exercisesDb
-        .push()
+    if (confirm("Пуш")) {
+      push()
         .then(() => alert("success push"))
         .catch((e) => alert("error push " + e.getMessage()));
     }
   };
   const confirmSync = () => {
-    if (confirm("синхронизировать")) {
-      exercisesDb
-        .push()
-        .then(() => alert("success push"))
-        .catch((e) => alert("error push " + e.getMessage()));
+    if (confirm("Скачать")) {
+      sync()
+        .then(() => alert("success sync"))
+        .then(() => {
+          refetch();
+        })
+        .catch((e) => alert("error sync " + e.getMessage()));
     }
   };
   return (
     <header className={classes.header}>
-      <button onClick={confirmPush}>Сохранить</button>
-      <button onClick={confirmSync}>Синхронизировать</button>
+      <button onClick={confirmPush}>Пуш</button>
+      <button onClick={confirmSync}>Скачать</button>
+      <button onClick={() => location.reload()}>refresh</button>
     </header>
   );
 };

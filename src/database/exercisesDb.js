@@ -1,6 +1,6 @@
 import { getKey } from "../models/exercises";
 import { fetchRemote, pushRemote } from "./remoteStorage";
-import { Base91 } from "base-ex";
+import { allExercises } from "../pages/consts";
 const NAME = "exercisesDb";
 const STORE_NAME = "exercisesStore";
 let db;
@@ -74,18 +74,27 @@ export async function getAll() {
 export async function sync() {
   const resp = await fetchRemote();
   const json = await resp.json();
-  const decoder = new Base91();
-  const parsedContent = decoder.decode(json.result.content[0], "str");
-  const data = JSON.parse(parsedContent, (key, value) =>
-    key === "date" ? new Date(value) : value
-  );
+  const parsedContent = window.atob(json.result.content[0]);
+  const data = JSON.parse(parsedContent, (key, value) => {
+    if (key === "date") {
+      return new Date(value);
+    } else if (key === "exec") {
+      return allExercises[value].value;
+    }
+    return value;
+  });
   data.forEach((m) => save(m));
 }
 
 export async function push() {
   const data = await getAll();
-  const encoder = new Base91();
-
-  const result = encoder.encode(JSON.stringify(data.target.result));
+  const r = JSON.stringify(
+    data.target.result.map((d) => ({
+      ...d,
+      note: null,
+      exec: allExercises.findIndex((e) => e.value === d.exec),
+    }))
+  );
+  const result = window.btoa(r);
   await pushRemote(result);
 }

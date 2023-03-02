@@ -25,9 +25,6 @@ select, option, button, input {
     width: 200px;
 }
 
-.submit {
-    margin-top: 40px;
-}
 label {
     width: 100%;
 }

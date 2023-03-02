@@ -1,35 +1,33 @@
 import React from "react";
-import { getKey } from "../models/exercises";
-import useLongPress from "../hooks/longClick";
 import classes from "./EditableNumberTd.module.css";
+import clsx from "clsx";
+import { useDoubleTap } from "use-double-tap";
 
-const EditableNumberTd = ({ i, setSelectedExec, updateExercise }) => {
-  const longPressEvent = useLongPress(
-    ({ id }) => {
-      setSelectedExec(id);
-    },
-    null,
-    {
-      shouldPreventDefault: true,
-      delay: 500,
-    }
-  );
+const EditableNumberTd = ({
+  i,
+  setSelectedExec,
+  updateExercise,
+  field,
+  classNameInput,
+}) => {
+  const bind = useDoubleTap(() => {
+    setSelectedExec(i.id);
+  });
+
   return (
-    <td
-      {...longPressEvent}
-      className={classes.td}
-      onMouseDown={(e) => longPressEvent.onMouseDown({ ...e, id: getKey(i) })}
-      onTouchStart={(e) => longPressEvent.onTouchStart({ ...e, id: getKey(i) })}
-    >
+    <td {...bind} className={clsx(classes.td)}>
       <input
-        className={classes.inputNumber}
+        className={clsx(classes.inputNumber, classNameInput)}
         onBlur={(event) => {
-          if (Number.isNaN(+event.target.value)) {
+          if (
+            Number.isNaN(+event.target.value) ||
+            +event.target.value === i[field]
+          ) {
             return;
           }
           updateExercise(+event.target.value);
         }}
-        defaultValue={i.mass}
+        defaultValue={i[field]}
         type="number"
       />
     </td>
