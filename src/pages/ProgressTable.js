@@ -41,7 +41,7 @@ const ProgressTable = () => {
         close={() => setSelectedExec(null)}
       />
       <thead>
-        <th>
+        <th colSpan={100}>
           <label>
             Кол-во столбцов {colCount}
             <input
