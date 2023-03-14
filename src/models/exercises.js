@@ -23,8 +23,9 @@ export function useExercise(id) {
 }
 
 export function useUpdateExercise() {
-  return useMutation((exercise) => {
-    return exercisesDb.save(exercise);
+  const { refetch } = useExercises();
+  return useMutation((exercise) => exercisesDb.save(exercise), {
+    onSuccess: refetch,
   });
 }
 
@@ -38,10 +39,18 @@ export function usePushExercises() {
   return useMutation(() => exercisesDb.push());
 }
 export function useSyncExercises() {
-  return useMutation(() => exercisesDb.sync());
+  const { refetch } = useExercises();
+
+  return useMutation(() => exercisesDb.sync(), {
+    onSuccess: refetch,
+  });
 }
 export function useRemoveExercise() {
-  return useMutation((exercise) => exercisesDb.remove(exercise));
+  const { refetch } = useExercises();
+
+  return useMutation((exercise) => exercisesDb.remove(exercise), {
+    onSuccess: refetch,
+  });
 }
 
 export function getKey(exec) {

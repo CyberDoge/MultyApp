@@ -1,16 +1,18 @@
 import React, { useMemo, useState } from "react";
-import { allExercises } from "./consts";
+import { allExercises, exercises as exercisesConst } from "./consts";
 import { format, isSameDay, startOfDay } from "date-fns";
 import { useExercises, useUpdateExercise } from "../models/exercises";
 import EditModal from "./EditModal";
 import EditableNumberTd from "./EditableNumberTd";
 import { clsx } from "clsx";
 import classes from "./ProgressTable.module.css";
+import { getCurrentDay } from "../utils/getCurrentDate";
 
 const ProgressTable = () => {
   const { data: exercises = [] } = useExercises();
   const [selectedExec, setSelectedExec] = useState();
   const [showTable, setShowTable] = useState(false);
+  const [colCount, setColCount] = useState(4);
 
   const constExercises = useMemo(() => {
     if (exercises) {
@@ -21,9 +23,10 @@ const ProgressTable = () => {
     return [];
   }, [exercises]);
 
-  const dates = [
-    ...new Set(exercises.map((i) => startOfDay(i.date).getTime())),
-  ].map((d) => new Date(d));
+  const dates = [...new Set(exercises.map((i) => startOfDay(i.date).getTime()))]
+    .map((d) => new Date(d))
+    .sort((a, b) => b.getTime() - a.getTime())
+    .slice(0, colCount);
 
   const { mutate: updateExercise } = useUpdateExercise();
 
@@ -37,6 +40,24 @@ const ProgressTable = () => {
         isOpen={selectedExec}
         close={() => setSelectedExec(null)}
       />
+      <thead>
+        <th>
+          <label>
+            Кол-во столбцов {colCount}
+            <input
+              value={colCount}
+              onChange={(e) => setColCount(+e.target.value)}
+              type="range"
+              name="quantity"
+              min="1"
+              max="20"
+            />
+          </label>
+          <button onClick={() => setColCount(exercises.length)}>
+            Показать всё
+          </button>
+        </th>
+      </thead>
       <thead onClick={() => toggleTable()}>
         <tr>
           <th colSpan={100}>Таблица с результатами</th>
@@ -44,7 +65,7 @@ const ProgressTable = () => {
         <tr className={clsx(!showTable && "hidden")}>
           <td colSpan={2}>дата</td>
           {dates.map((i, index) => (
-            <td key={index + "date"}>{format(i, "dd.MM")}</td>
+            <td key={index + "date" + i.getTime()}>{format(i, "dd.MM")}</td>
           ))}
         </tr>
       </thead>
@@ -53,7 +74,15 @@ const ProgressTable = () => {
           <React.Fragment key={constExec.value}>
             <tr>
               <td rowSpan={2}>{constExec.value}</td>
-              <td>В</td>
+              <td
+                className={clsx(
+                  exercisesConst[getCurrentDay()].find(
+                    (v) => v.value === constExec.value
+                  ) && classes.currentDayRow
+                )}
+              >
+                В
+              </td>
               {dates
                 .map((i) => {
                   return exercises.find((item) => {
@@ -67,7 +96,7 @@ const ProgressTable = () => {
                     <EditableNumberTd
                       field={"mass"}
                       i={item}
-                      key={index + "mass" + constExec.value}
+                      key={item.id}
                       setSelectedExec={setSelectedExec}
                       updateExercise={(v) => {
                         updateExercise({
@@ -82,7 +111,15 @@ const ProgressTable = () => {
                 )}
             </tr>
             <tr className="bg-gray-200">
-              <td>К</td>
+              <td
+                className={clsx(
+                  exercisesConst[getCurrentDay()].find(
+                    (v) => v.value === constExec.value
+                  ) && classes.currentDayRow
+                )}
+              >
+                К
+              </td>
               {dates
                 .map((i) => {
                   return exercises.find((item) => {
@@ -97,7 +134,7 @@ const ProgressTable = () => {
                       classNameInput="bg-gray-200"
                       field={"count"}
                       i={item}
-                      key={index + "count" + constExec.value}
+                      key={item.id}
                       setSelectedExec={setSelectedExec}
                       updateExercise={(v) => {
                         updateExercise({

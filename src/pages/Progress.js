@@ -5,27 +5,16 @@ import { format, getISODay, startOfDay } from "date-fns";
 import { generateUUID } from "../utils/uuid";
 import { useSaveExercise } from "../models/exercises";
 import ToastMessage from "../components/ToastMessage";
+import { getCurrentDay } from "../utils/getCurrentDate";
 
 const Progress = () => {
-  const [exec, setExec] = useState(undefined);
+  const [exec, setExec] = useState("");
   const [mass, setMass] = useState(0);
   const [count, setCount] = useState(0);
   const [note, setNote] = useState(undefined);
   const [date, setDate] = useState(new Date());
   const [message, setMessage] = useState(undefined);
   const { mutateAsync } = useSaveExercise();
-  console.log(
-    Object.assign(
-      {
-        exec,
-        mass,
-        count,
-        date: startOfDay(date),
-        id: generateUUID(),
-      },
-      note ? { note } : null
-    )
-  );
   const submit = async (e) => {
     e.preventDefault();
 
@@ -53,30 +42,18 @@ const Progress = () => {
       note ? { note } : null
     );
     const res = await mutateAsync(savedObj);
-    setMessage(res.type + " " + JSON.stringify(savedObj) || "ошибка");
+    setMessage(res.type || "ошибка");
     setTimeout(() => {
       setMessage(undefined);
     }, 5000);
-    setExec(undefined);
+    setExec("");
     setNote(undefined);
     setMass(0);
     setCount(0);
   };
 
-  function getDay() {
-    const day = getISODay(new Date());
-    if (day < 3) {
-      return 0;
-    }
-    if (day < 5) {
-      return 1;
-    }
-
-    return 2;
-  }
-
   const restExercises = exercises.slice();
-  restExercises.splice(getDay(), 1);
+  restExercises.splice(getCurrentDay(), 1);
   return (
     <form className={classes.form} onSubmit={submit}>
       {message && (
@@ -104,7 +81,7 @@ const Progress = () => {
       <label>
         <span className={classes.labelSubtext}>Упражнение:&nbsp;</span>
         <select value={exec} onChange={(e) => setExec(e.target.value)}>
-          {[{ value: null }, ...exercises[getDay()]].map((e) => (
+          {[{ value: "" }, ...exercises[getCurrentDay()]].map((e) => (
             <option key={e.value} value={e.value}>
               {e.value}
               {" - "}
@@ -133,6 +110,7 @@ const Progress = () => {
         <span className={classes.labelSubtext}>Вес:&nbsp;</span>
         <input
           type="number"
+          pattern="[0-9]+([\.][0-9]+)?"
           value={mass}
           onClick={(e) => e.target.select(0, 100)}
           onChange={(e) => setMass(e.target.value)}
@@ -160,6 +138,7 @@ const Progress = () => {
         <span className={classes.labelSubtext}>Кол-во:&nbsp;</span>
         <input
           type="number"
+          pattern="[0-9]+([\.][0-9]+)?"
           value={count}
           onClick={(e) => e.target.select(0, 100)}
           onChange={(e) => setCount(e.target.value)}

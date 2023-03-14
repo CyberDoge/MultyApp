@@ -7,6 +7,7 @@ import {
   useSaveExercise,
 } from "../models/exercises";
 import { format } from "date-fns";
+import { allExercises, exercises, muscles } from "./consts";
 
 const EditModal = ({ id, isOpen, close }) => {
   const [exec, setExec] = useState(null);
@@ -36,9 +37,27 @@ const EditModal = ({ id, isOpen, close }) => {
     }
     close();
   };
-
   return (
     <Modal isOpen={isOpen} onRequestClose={close} contentLabel="Удалить">
+      <label>
+        <span className={classes.labelSubtext}>Упражнение:&nbsp;</span>
+        <select
+          value={exec.exec}
+          onChange={(event) =>
+            setExec((e) => ({ ...e, exec: event.target.value }))
+          }
+        >
+          {[{ value: "" }, ...allExercises].map((e) => (
+            <option key={e.value} value={e.value}>
+              {e.value}
+              {" - "}
+              {e.type
+                ?.map((t) => muscles.find((s) => s.key === t).value)
+                .join(" ")}
+            </option>
+          ))}
+        </select>
+      </label>
       <label>
         <span>масса</span>
         <input

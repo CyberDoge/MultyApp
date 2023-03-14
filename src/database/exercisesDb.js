@@ -74,27 +74,15 @@ export async function getAll() {
 export async function sync() {
   const resp = await fetchRemote();
   const json = await resp.json();
-  const parsedContent = window.atob(json.result.content[0]);
-  const data = JSON.parse(parsedContent, (key, value) => {
-    if (key === "date") {
-      return new Date(value);
-    } else if (key === "exec") {
-      return allExercises[value].value;
-    }
-    return value;
-  });
+  const data = json.map((o) => ({
+    ...o,
+    date: new Date(o.date),
+  }));
+
   data.forEach((m) => save(m));
 }
 
 export async function push() {
   const data = await getAll();
-  const r = JSON.stringify(
-    data.target.result.map((d) => ({
-      ...d,
-      note: null,
-      exec: allExercises.findIndex((e) => e.value === d.exec),
-    }))
-  );
-  const result = window.btoa(r);
-  await pushRemote(result);
+  await pushRemote(data.target.result);
 }

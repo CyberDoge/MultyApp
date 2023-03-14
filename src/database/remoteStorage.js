@@ -1,12 +1,18 @@
 export function pushRemote(data) {
-  return fetch(`https://api.telegra.ph/editPage/`, {
-    method: "GET",
-    redirect: "follow",
-  });
+  return fetch(
+    `${process.env.REACT_APP_STORE_URL}?apiKey=${process.env.REACT_APP_ACCESS_TOKEN}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
 }
 
 export function fetchRemote() {
   return fetch(
-    "https://api.telegra.ph/getPage/Multy-App-Remote-Database-exercisesDb-02-11?return_content=true"
+    `${process.env.REACT_APP_STORE_URL}?apiKey=${process.env.REACT_APP_ACCESS_TOKEN}`
   );
 }

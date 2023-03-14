@@ -5,7 +5,14 @@ import "./firebase";
 import App from "./App";
 import "core-js/full";
 import { QueryClient, QueryClientProvider } from "react-query";
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnMount: false,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

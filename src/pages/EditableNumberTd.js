@@ -16,7 +16,9 @@ const EditableNumberTd = ({
 
   return (
     <td {...bind} className={clsx(classes.td)}>
-      <input
+      {i[field]}
+      {/*  <input
+        pattern="\d*"
         className={clsx(classes.inputNumber, classNameInput)}
         onBlur={(event) => {
           if (
@@ -29,7 +31,7 @@ const EditableNumberTd = ({
         }}
         defaultValue={i[field]}
         type="number"
-      />
+      />*/}
     </td>
   );
 };

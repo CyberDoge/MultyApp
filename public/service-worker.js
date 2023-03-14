@@ -8,7 +8,16 @@ self.addEventListener("fetch", (event) => {
       })
   );
 });
-
+/*self.addEventListener("fetch", (event) => {
+  event.respondWith(
+    caches.match(event.request).then((cache) => {
+      return fetch(event.request).then((response) => {
+        cache.put(event.request, response.clone());
+        return response;
+      });
+    })
+  );
+});*/
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches

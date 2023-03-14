@@ -28,6 +28,7 @@ const Header = () => {
   };
   return (
     <header className={classes.header}>
+      <span>v 11/03</span>
       <button onClick={confirmPush}>Пуш</button>
       <button onClick={confirmSync}>Скачать</button>
       <button onClick={() => location.reload()}>refresh</button>
