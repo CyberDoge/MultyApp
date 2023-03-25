@@ -1,27 +1,51 @@
+const CACHE_NAME = "static-resources";
+
 self.addEventListener("fetch", (event) => {
+  console.log(event.request.url);
+  if (event.request.url.startsWith("chrome-extension")) {
+    return;
+  }
   event.respondWith(
-    caches
-      .match(event.request)
-      .then((response) => response || fetch(event.request))
-      .catch(function () {
-        return caches.match("index.html");
+    fetch(event.request)
+      .then((response) => {
+        if (!response.ok) {
+          throw new TypeError("bad response status");
+        }
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(response.url, clone));
+        return response;
+      })
+      .catch((e) => {
+        console.log(`Failed fetch ${event?.request?.url}`, e);
+        return caches.match(event.request).catch(() => {
+          return caches.match("index.html");
+        });
       })
   );
 });
-/*self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cache) => {
-      return fetch(event.request).then((response) => {
-        cache.put(event.request, response.clone());
-        return response;
-      });
+
+self.addEventListener("activate", (event) => {
+  fetch(event.request)
+    .then((response) => {
+      if (!response.ok) {
+        throw new TypeError("bad response status");
+      }
+      const clone = response.clone();
+      caches.open(CACHE_NAME).then((cache) => cache.put(response.url, clone));
+      return response;
     })
-  );
-});*/
+    .catch((e) => {
+      console.log(`Failed fetch ${event?.request?.url}`, e);
+      return caches.match(event.request).catch(() => {
+        return caches.match("index.html");
+      });
+    });
+});
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
-      .open("static-resources")
+      .open(CACHE_NAME)
       .then((cache) =>
         cache.addAll([
           "/",
