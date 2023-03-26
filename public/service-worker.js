@@ -16,14 +16,8 @@ self.addEventListener("fetch", (event) => {
         }
         const clone = response.clone();
         caches.open(CACHE_NAME).then(async (cache) => {
-          if (response.url.match(/main\.[\da-z]{8}\.(?:js|css)/)) {
-            const keys = await cache.keys();
-            for (const key of keys) {
-              if (key.url.match(/main\.[\da-z]{8}\.(?:js|css)/)) {
-                cache.delete(key);
-              }
-            }
-          }
+          clearPrevCache(cache, response.url, /main\.[\da-z]{8}\.js/);
+          clearPrevCache(cache, response.url, /main\.[\da-z]{8}\.css/);
           cache.put(response.url, clone);
         });
         return response;
@@ -37,6 +31,16 @@ self.addEventListener("fetch", (event) => {
   );
 });
 
+async function clearPrevCache(cache, url, pattern) {
+  if (url.match(pattern)) {
+    const keys = await cache.keys();
+    for (const key of keys) {
+      if (key.url.match(pattern)) {
+        cache.delete(key);
+      }
+    }
+  }
+}
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
