@@ -1,30 +1,33 @@
 const CACHE_NAME = "static-resources";
 
 self.addEventListener("fetch", (event) => {
+  const { request } = event;
   if (
-    new URL(event.request.url).origin !== location.origin ||
-    event.request.url.startsWith("chrome-extension") ||
-    event.request.url.endsWith(".hot-update.json")
+    new URL(request.url).origin !== location.origin ||
+    request.url.startsWith("chrome-extension") ||
+    request.url.endsWith(".hot-update.json")
   ) {
     return;
   }
   event.respondWith(
-    fetch(event.request)
+    fetch(request)
       .then((response) => {
         if (!response.ok) {
           throw new TypeError("bad response status");
         }
         const clone = response.clone();
         caches.open(CACHE_NAME).then(async (cache) => {
-          clearPrevCache(cache, response.url, /main\.[\da-z]{8}\.js/);
-          clearPrevCache(cache, response.url, /main\.[\da-z]{8}\.css/);
-          cache.put(response.url, clone);
+          if (await cache.match(request)) {
+            return;
+          }
+          updateCacheIfNeed(cache, request.url, clone, /main\.[\da-z]{8}\.js/);
+          updateCacheIfNeed(cache, request.url, clone, /main\.[\da-z]{8}\.css/);
         });
         return response;
       })
       .catch((e) => {
-        console.log(`Failed fetch ${event?.request?.url}`, e);
-        return caches.match(event.request).catch(() => {
+        console.log(`Failed fetch ${request?.url}`, e);
+        return caches.match(request).catch(() => {
           return caches.match("index.html");
         });
       })
@@ -41,6 +44,15 @@ async function clearPrevCache(cache, url, pattern) {
     }
   }
 }
+
+async function updateCacheIfNeed(cache, url, clone, pattern) {
+  if (url.match(pattern)) {
+    await clearPrevCache(cache, url, pattern);
+    cache.put(url, clone);
+    console.log(`обновил ресурс ${url}`);
+  }
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
