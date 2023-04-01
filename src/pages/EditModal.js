@@ -7,7 +7,7 @@ import {
   useSaveExercise,
 } from "../models/exercises";
 import { format } from "date-fns";
-import { allExercises, exercises, muscles } from "./consts";
+import { allExercises, muscles } from "./consts";
 
 const EditModal = ({ id, isOpen, close }) => {
   const [exec, setExec] = useState(null);

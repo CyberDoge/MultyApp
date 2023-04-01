@@ -23,10 +23,15 @@ const ProgressTable = () => {
     return [];
   }, [exercises]);
 
-  const dates = [...new Set(exercises.map((i) => startOfDay(i.date).getTime()))]
-    .map((d) => new Date(d))
-    .sort((a, b) => b.getTime() - a.getTime())
-    .slice(0, colCount);
+  const allDates = useMemo(
+    () =>
+      [...new Set(exercises.map((i) => startOfDay(i.date).getTime()))]
+        .map((d) => new Date(d))
+        .sort((a, b) => b.getTime() - a.getTime()),
+    [exercises]
+  );
+
+  const dates = allDates.slice(0, colCount);
 
   const { mutate: updateExercise } = useUpdateExercise();
 
@@ -48,12 +53,11 @@ const ProgressTable = () => {
               value={colCount}
               onChange={(e) => setColCount(+e.target.value)}
               type="range"
-              name="quantity"
               min="1"
-              max="20"
+              max={allDates.length}
             />
           </label>
-          <button onClick={() => setColCount(exercises.length)}>
+          <button onClick={() => setColCount(allDates.length)}>
             Показать всё
           </button>
         </th>

@@ -1,8 +1,10 @@
 .header {
+    max-width: 100vw;
     display: flex;
-    gap: 30px;
+    justify-content: space-between;
     text-align: center;
     align-items: center;
+    border-bottom: 2px solid black;
 }
 
 .header > span {

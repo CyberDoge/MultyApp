@@ -146,14 +146,6 @@ const Progress = () => {
         <div className={classes.count}>
           <button
             onClick={(e) => {
-              setCount((c) => 1 + c);
-              e.preventDefault();
-            }}
-          >
-            Увеличить кол-во на 1
-          </button>
-          <button
-            onClick={(e) => {
               setCount((c) => 2 + c);
               e.preventDefault();
             }}
