@@ -1,16 +1,14 @@
 import React from "react";
-import Progress from "./pages/Progress";
-import ProgressTable from "./pages/ProgressTable";
-import Header from "./pages/Header";
+import ExercisesProgress from "./pages/ExercisesProgress";
 
 function App() {
-  return (
-    <div>
-      <Header />
-      <Progress />
-      <ProgressTable />
-    </div>
-  );
+  console.log(window.location);
+  switch (window.location) {
+    case "/exec": {
+      return <ExercisesProgress />;
+    }
+  }
+  return <ExercisesProgress />;
 }
 
 export default App;

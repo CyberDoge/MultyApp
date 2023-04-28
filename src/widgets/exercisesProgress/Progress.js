@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import classes from "./Progress.module.css";
-import { allExercises, exercises, muscles } from "./consts";
-import { format, getISODay, startOfDay } from "date-fns";
-import { generateUUID } from "../utils/uuid";
-import { useSaveExercise } from "../models/exercises";
-import ToastMessage from "../components/ToastMessage";
-import { getCurrentDay } from "../utils/getCurrentDate";
+import { allExercises, exercises, muscles } from "models/consts";
+import { format, startOfDay } from "date-fns";
+import { generateUUID } from "utils/uuid";
+import { useSaveExercise } from "models/exercises";
+import ToastMessage from "components/ToastMessage";
+import { getCurrentDay } from "utils/getCurrentDate";
 
 const Progress = () => {
   const [exec, setExec] = useState("");

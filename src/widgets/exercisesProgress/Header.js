@@ -4,7 +4,7 @@ import {
   useExercises,
   usePushExercises,
   useSyncExercises,
-} from "../models/exercises";
+} from "models/exercises";
 import clsx from "clsx";
 
 const Header = () => {

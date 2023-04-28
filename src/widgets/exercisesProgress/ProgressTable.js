@@ -1,12 +1,12 @@
 import React, { useMemo, useState } from "react";
-import { allExercises, exercises as exercisesConst } from "./consts";
+import { allExercises, exercises as exercisesConst } from "models/consts";
 import { format, isSameDay, startOfDay } from "date-fns";
-import { useExercises, useUpdateExercise } from "../models/exercises";
+import { useExercises, useUpdateExercise } from "models/exercises";
 import EditModal from "./EditModal";
 import EditableNumberTd from "./EditableNumberTd";
 import { clsx } from "clsx";
 import classes from "./ProgressTable.module.css";
-import { getCurrentDay } from "../utils/getCurrentDate";
+import { getCurrentDay } from "utils/getCurrentDate";
 
 const ProgressTable = () => {
   const { data: exercises = [] } = useExercises();

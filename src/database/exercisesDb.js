@@ -1,6 +1,6 @@
-import { getKey } from "../models/exercises";
+import { getKey } from "models/exercises";
 import { fetchRemote, pushRemote } from "./remoteStorage";
-import { allExercises } from "../pages/consts";
+
 const NAME = "exercisesDb";
 const STORE_NAME = "exercisesStore";
 let db;
