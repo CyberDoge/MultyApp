@@ -3,13 +3,7 @@ import classes from "./EditableNumberTd.module.css";
 import clsx from "clsx";
 import { useDoubleTap } from "use-double-tap";
 
-const EditableNumberTd = ({
-  i,
-  setSelectedExec,
-  updateExercise,
-  field,
-  classNameInput,
-}) => {
+const EditableNumberTd = ({ i, setSelectedExec, field }) => {
   const bind = useDoubleTap(() => {
     setSelectedExec(i.id);
   });
