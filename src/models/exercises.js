@@ -52,7 +52,3 @@ export function useRemoveExercise() {
     onSuccess: refetch,
   });
 }
-
-export function getKey(exec) {
-  return exec.id;
-}

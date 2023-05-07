@@ -1,13 +1,12 @@
-import { getKey } from "models/exercises";
 import {
   fetchRemote as fetchRemoteStore,
   pushRemote as pushRemoteStore,
 } from "./remoteStorage";
 
-const fetchRemote = fetchRemoteStore(process.env.REACT_APP_EXEC_STORE_URL);
-const pushRemote = pushRemoteStore(process.env.REACT_APP_EXEC_STORE_URL);
-const NAME = "exercisesDb";
-const STORE_NAME = "exercisesStore";
+const fetchRemote = fetchRemoteStore(process.env.REACT_APP_FINANCE_STORE_URL);
+const pushRemote = pushRemoteStore(process.env.REACT_APP_FINANCE_STORE_URL);
+const NAME = "financesDb";
+const STORE_NAME = "financesStore";
 let db;
 
 const openRequest = indexedDB.open(NAME, 1);
