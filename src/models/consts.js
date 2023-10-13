@@ -114,9 +114,9 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=FBsFqk61jnw",
     },
     {
-      value: "Скручивание в кроссовере на коленях",
+      value: "Скручивание на шаре",
       type: ["п"],
-      link: "https://www.youtube.com/watch?v=wUc1TeuU3w0",
+      link: "https://youtu.be/ciFXMZCssnU?t=39",
     },
   ],
 ];
