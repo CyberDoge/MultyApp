@@ -45,9 +45,9 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=2VZuiPx6IW0",
     },
     {
-      value: "Скручивание лежа на полу",
+      value: "Скручивание с фитболом",
       type: ["пр"],
-      link: "https://youtu.be/EB77xEA7_jU",
+      link: "https://youtu.be/ciFXMZCssnU?t=39",
     },
   ],
   [
@@ -86,7 +86,7 @@ export const exercises = [
     {
       value: "Тяга верхнего блока одной рукой",
       type: ["Ш"],
-      link: "https://www.youtube.com/watch?v=GzFhE9UzwZ0",
+      link: "https://youtu.be/9wcIJfe-ofs?t=33",
     },
     {
       value: "Сведение рук бабочка",
@@ -112,11 +112,6 @@ export const exercises = [
       value: "Французкий жим с гантелями/изогнутой штангой",
       type: ["т"],
       link: "https://www.youtube.com/watch?v=FBsFqk61jnw",
-    },
-    {
-      value: "Скручивание в кроссовере на коленях",
-      type: ["п"],
-      link: "https://www.youtube.com/watch?v=wUc1TeuU3w0",
     },
   ],
 ];
