@@ -47,7 +47,7 @@ export const exercises = [
     {
       value: "Скручивание с фитболом",
       type: ["пр"],
-      link: "https://youtu.be/ciFXMZCssnU?t=39",
+      link: "https://youtu.be/EB77xEA7_jU",
     },
   ],
   [
@@ -84,7 +84,7 @@ export const exercises = [
   ],
   [
     {
-      value: "Тяга верхнего блока одной рукой",
+      value: "Тяга на широчайшие",
       type: ["Ш"],
       link: "https://youtu.be/9wcIJfe-ofs?t=33",
     },
