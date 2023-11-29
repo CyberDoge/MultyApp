@@ -10,14 +10,27 @@ export const muscles = [
   { value: "Ягодичные", key: "Я" },
   { value: "Трапеции", key: "Т" },
   { value: "Задняя поверхность бедра (бицепсы бедер)", key: "З" },
+  { value: "Предплечия", key: "предпл" },
+  { value: "Икры", key: "Икры" },
+  { value: "Приводящие мышцы бедра", key: "пмб" },
 ];
 
 export const exercises = [
   [
     {
-      value: "Жим гантелей лежа",
-      type: ["г"],
-      link: "https://www.youtube.com/shorts/FBIIDKZbLLY",
+      value: "Жим ногами со акцентом на квадрицепс",
+      type: ["к", "я"],
+      link: "https://www.youtube.com/watch?v=2VZuiPx6IW0",
+    },
+    {
+      value: "подъем на носки",
+      type: ["Икры"],
+      link: "https://youtu.be/CYFhrdjfCK8?t=1624",
+    },
+    {
+      value: "Болгарский сплит-присед с гантелями либо в смите",
+      type: ["Я", "к"],
+      link: "https://www.youtube.com/watch?v=0lP7rMaZb2c",
     },
     {
       value: "Тяга горизонтального блока паралелльным хватом на широчайшие",
@@ -25,37 +38,13 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=WrWb95t_9BQ",
     },
     {
-      value: "Махи гантелей на среднюю дельту",
-      type: ["п"],
-      link: "https://www.youtube.com/shorts/buyc4l5M0oE",
-    },
-    {
-      value: "Разгибание рук в блоке стоя",
-      type: ["т"],
-      link: "https://www.youtube.com/watch?v=IeXmX0avqZQ",
-    },
-    {
-      value: "Сгибание на бицепс сидя на лавке",
-      type: ["Б"],
-      link: "https://www.youtube.com/watch?v=52SmOuScHvo",
-    },
-    {
-      value: "Жим ногами со акцентом на квадрицепс",
-      type: ["к", "я"],
-      link: "https://www.youtube.com/watch?v=2VZuiPx6IW0",
-    },
-    {
-      value: "Скручивание с фитболом",
-      type: ["пр"],
-      link: "https://youtu.be/EB77xEA7_jU",
+      value: "Приводящие мышцы бедра",
+      type: ["пмб"],
+      link: "https://www.youtube.com/watch?v=O-BVD9uhGTc",
     },
   ],
   [
-    {
-      value: "Болгарский сплит-присед с гантелями либо в смите",
-      type: ["Я", "к"],
-      link: "https://www.youtube.com/watch?v=0lP7rMaZb2c",
-    },
+
     {
       value: "Тяга широким хватом в груди",
       type: ["Т"],
@@ -114,6 +103,43 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=FBsFqk61jnw",
     },
   ],
+  [
+    {
+      value: "Жим гантелей лежа",
+      type: ["г"],
+      link: "https://www.youtube.com/shorts/FBIIDKZbLLY",
+    },
+    {
+      value: "Тяга горизонтального блока широким хватом на трапецию",
+      type: ["Т"],
+      link: "https://www.youtube.com/watch?v=kmwrwASiGp4",
+    },
+    {
+      value: "Махи гантелей на среднюю дельту",
+      type: ["п"],
+      link: "https://www.youtube.com/shorts/buyc4l5M0oE",
+    },
+    {
+      value: "Разгибание рук в блоке стоя",
+      type: ["т"],
+      link: "https://www.youtube.com/watch?v=IeXmX0avqZQ",
+    },
+    {
+      value: "Сгибание на бицепс сидя на лавке",
+      type: ["Б"],
+      link: "https://www.youtube.com/watch?v=52SmOuScHvo",
+    },
+    {
+      value: "Сгибания и разгибания запястия",
+      type: ["предпл"],
+      link: "https://youtu.be/3VAWB60ODJo?t=39",
+    },
+    {
+      value: "Скручивание с фитболом",
+      type: ["пр"],
+      link: "https://youtu.be/EB77xEA7_jU",
+    },
+  ]
 ];
 
 export const allExercises = exercises.flat();
