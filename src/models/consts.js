@@ -17,39 +17,12 @@ export const muscles = [
 
 export const exercises = [
   [
-    {
-      value: "Жим ногами со акцентом на квадрицепс",
-      type: ["к", "я"],
-      link: "https://www.youtube.com/watch?v=2VZuiPx6IW0",
-    },
-    {
-      value: "подъем на носки",
-      type: ["Икры"],
-      link: "https://youtu.be/CYFhrdjfCK8?t=1624",
-    },
-    {
-      value: "Болгарский сплит-присед с гантелями либо в смите",
-      type: ["Я", "к"],
-      link: "https://www.youtube.com/watch?v=0lP7rMaZb2c",
-    },
-    {
-      value: "Тяга горизонтального блока паралелльным хватом на широчайшие",
-      type: ["Ш"],
-      link: "https://www.youtube.com/watch?v=WrWb95t_9BQ",
-    },
-    {
-      value: "Приводящие мышцы бедра",
-      type: ["пмб"],
-      link: "https://www.youtube.com/watch?v=O-BVD9uhGTc",
-    },
-  ],
-  [
 
-    {
+    /*{
       value: "Тяга широким хватом в груди",
       type: ["Т"],
       link: "https://www.youtube.com/watch?v=kmwrwASiGp4",
-    },
+    },*/
     {
       value: "Жим гантелей сидя",
       type: ["п"],
@@ -60,23 +33,43 @@ export const exercises = [
       type: ["Б"],
       link: "https://www.youtube.com/watch?v=AnZeqeW4uGw",
     },
-    {
+    /*{
       value: "Сгибание ног лежа",
       type: ["З"],
       link: "https://www.youtube.com/watch?v=vByupeWa1G4",
+    },*/
+    // {
+    //   value: "Разгибание на трицепс над головой в кроссовере",
+    //   type: ["т"],
+    //   link: "https://www.youtube.com/watch?v=mTcgRhhAkXM",
+    // },
+    {
+      value: "трицепс в блоке",
+      type: ["т"],
+      link: "https://youtu.be/6Ms1Wo7Dtl0?t=12",
     },
     {
-      value: "Разгибание на трицепс над головой в кроссовере",
-      type: ["т"],
-      link: "https://www.youtube.com/watch?v=mTcgRhhAkXM",
+      value: "Сгибания и разгибания запястия",
+      type: ["предпл"],
+      link: "https://youtu.be/3VAWB60ODJo?t=39",
+    },
+    {
+      value: "Жим ногами со акцентом на квадрицепс",
+      type: ["к", "я"],
+      link: "https://www.youtube.com/watch?v=2VZuiPx6IW0",
+    },
+    {
+      value: "подъем на носки",
+      type: ["Икры"],
+      link: "https://youtu.be/CYFhrdjfCK8?t=1624",
     },
   ],
   [
-    {
+  /*  {
       value: "Тяга на широчайшие",
       type: ["Ш"],
       link: "https://youtu.be/9wcIJfe-ofs?t=33",
-    },
+    },*/
     {
       value: "Сведение рук бабочка",
       type: ["г"],
@@ -93,14 +86,19 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=gf2xr1UaMBA",
     },
     {
+      value: "Французкий жим с гантелями/изогнутой штангой",
+      type: ["т"],
+      link: "https://www.youtube.com/watch?v=FBsFqk61jnw",
+    },
+    {
       value: "Разгибание ног сидя",
       type: ["к"],
       link: "https://www.youtube.com/watch?v=WHzXyy7coBc",
     },
     {
-      value: "Французкий жим с гантелями/изогнутой штангой",
-      type: ["т"],
-      link: "https://www.youtube.com/watch?v=FBsFqk61jnw",
+      value: "подъем на носки",
+      type: ["Икры"],
+      link: "https://youtu.be/CYFhrdjfCK8?t=1624",
     },
   ],
   [
@@ -109,11 +107,11 @@ export const exercises = [
       type: ["г"],
       link: "https://www.youtube.com/shorts/FBIIDKZbLLY",
     },
-    {
+    /* {
       value: "Тяга горизонтального блока широким хватом на трапецию",
       type: ["Т"],
       link: "https://www.youtube.com/watch?v=kmwrwASiGp4",
-    },
+    },*/
     {
       value: "Махи гантелей на среднюю дельту",
       type: ["п"],
@@ -130,16 +128,32 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=52SmOuScHvo",
     },
     {
-      value: "Сгибания и разгибания запястия",
-      type: ["предпл"],
-      link: "https://youtu.be/3VAWB60ODJo?t=39",
+      value: "подъем на носки",
+      type: ["Икры"],
+      link: "https://youtu.be/CYFhrdjfCK8?t=1624",
     },
     {
+      value: "Приводящие мышцы бедра",
+      type: ["пмб"],
+      link: "https://www.youtube.com/watch?v=O-BVD9uhGTc",
+    },
+  /*  {
       value: "Скручивание с фитболом",
       type: ["пр"],
       link: "https://youtu.be/EB77xEA7_jU",
+    },*/
+  ],
+  [
+    {
+      value: "отжимания на брусьях",
+      type: ["г"],
+      link: "https://www.youtube.com/watch?v=oBou1aR3KTU",
+    },
+    {
+      value: "подтягивания",
+      type: ["Ш"],
+      link: "https://www.youtube.com/watch?v=chawvGPn-Wo",
     },
   ]
 ];
-
 export const allExercises = exercises.flat();
