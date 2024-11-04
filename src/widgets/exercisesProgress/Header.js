@@ -31,7 +31,7 @@ const Header = () => {
   };
   return (
     <header className={classes.header}>
-      <span>v 18/05/24</span>
+      <span>v 4/11/24</span>
       <button onClick={() => setShow((s) => !s)}>Управление</button>
       <div
         className={clsx(

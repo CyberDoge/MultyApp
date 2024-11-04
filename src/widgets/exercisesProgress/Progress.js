@@ -12,6 +12,7 @@ const Progress = () => {
   const [mass, setMass] = useState(0);
   const [count, setCount] = useState(0);
   const [note, setNote] = useState(undefined);
+  const [selectedExecSet, setSelectedExecSet] = useState(null);
   const [date, setDate] = useState(new Date());
   const [message, setMessage] = useState(undefined);
   const { mutateAsync } = useSaveExercise();
@@ -61,6 +62,23 @@ const Progress = () => {
           {message}
         </ToastMessage>
       )}
+      <label>
+        <span className={classes.labelSubtext}>Сет упражнений</span>
+        <select value={selectedExecSet} onChange={(e) => setSelectedExecSet(e.target.value)}>
+          <option value={null}>
+              сброс
+          </option>
+          <option value={0}>
+              1
+          </option>
+          <option value={1}>
+              2
+          </option>
+          <option value={2}>
+              3
+          </option>
+        </select>
+      </label>
       <p>
         Выбрано:{" "}
         <a
@@ -81,7 +99,7 @@ const Progress = () => {
       <label>
         <span className={classes.labelSubtext}>Упражнение:&nbsp;</span>
         <select value={exec} onChange={(e) => setExec(e.target.value)}>
-          {[{ value: "" }, ...exercises[getCurrentDay()]].map((e) => (
+          {[{ value: "" }, ...exercises[selectedExecSet ?? getCurrentDay()]].map((e) => (
             <option key={e.value} value={e.value}>
               {e.value}
               {" - "}
