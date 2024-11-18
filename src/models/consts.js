@@ -25,14 +25,9 @@ export const exercises = [
       link: "https://www.youtube.com/shorts/FBIIDKZbLLY"
     },
     {
-      value: "молотки в блоке",
-      type: ["пл-луч-мышцы"],
-      link: "https://youtu.be/3VAWB60ODJo?t=24"
-    },
-    {
-      value: "Махи гантелей на среднюю дельту",
-      type: ["п"],
-      link: "https://www.youtube.com/shorts/buyc4l5M0oE"
+      value: "Тяга штанги в наклоне",
+      type: ["Ш"],
+      link: "https://www.youtube.com/shorts/NtDgLs1tBb4"
     },
     {
       value: "Жим ногами со акцентом на квадрицепс",
@@ -45,9 +40,9 @@ export const exercises = [
       link: "https://youtu.be/CYFhrdjfCK8?t=1624"
     },
     {
-      value: "Сгибание на бицепс сидя на лавке",
-      type: ["Б"],
-      link: "https://www.youtube.com/watch?v=52SmOuScHvo"
+      value: "молотки в блоке",
+      type: ["пл-луч-мышцы"],
+      link: "https://youtu.be/3VAWB60ODJo?t=24"
     },
     {
       value: "Французкий жим с гантелями/изогнутой штангой",
@@ -64,9 +59,9 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=Wyj0OR7tPLk?feature=share"
     },
     {
-      value: "Сведение рук бабочка",
+      value: "Жим на низ груди в тренажере",
       type: ["г"],
-      link: "https://www.youtube.com/watch?v=kiLiQ0W5fYQ"
+      link: "https://youtu.be/aINNtIq6thM?t=92"
     },
     {
       value: "Сгибание ног стоя",
@@ -79,14 +74,14 @@ export const exercises = [
       link: "https://www.youtube.com/watch?v=WHzXyy7coBc"
     },
     {
-      value: "Разгибание рук в блоке стоя",
-      type: ["т"],
-      link: "https://www.youtube.com/watch?v=IeXmX0avqZQ"
-    },
-    {
       value: "подъем на носки",
       type: ["Икры"],
       link: "https://youtu.be/CYFhrdjfCK8?t=1624"
+    },
+    {
+      value: "Разгибание рук в блоке стоя",
+      type: ["т"],
+      link: "https://www.youtube.com/watch?v=IeXmX0avqZQ"
     },
     {
       value: "Бицепс в кроссовере сокращенная позиция",
@@ -123,9 +118,9 @@ export const exercises = [
       link: "https://youtu.be/CYFhrdjfCK8?t=1624",
     },
     {
-      value: "Сгибания и разгибания запястия",
-      type: ["предпл"],
-      link: "https://youtu.be/3VAWB60ODJo?t=39"
+      value: "Сведение рук бабочка",
+      type: ["г"],
+      link: "https://www.youtube.com/watch?v=kiLiQ0W5fYQ"
     },
   ]
 ];
