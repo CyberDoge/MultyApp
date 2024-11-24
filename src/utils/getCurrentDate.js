@@ -9,9 +9,5 @@ export function getCurrentDay() {
   if (day > 2 && day < 5) {
     return 1;
   }
-  if(day > 4 && day < 7) {
-    return 2;
-  }
-
   return 3;
 }
